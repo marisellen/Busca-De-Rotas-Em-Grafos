@@ -7,6 +7,7 @@ import java.io.PrintWriter;
 import java.util.*;
 
 public class Dijkstra {
+
     private Graph grafo;
     private List<Node> caminho;
     private int custo;
@@ -18,8 +19,13 @@ public class Dijkstra {
     }
 
     public void executar(int xOrig, int yOrig, int xDest, int yDest) {
+
         long start = System.currentTimeMillis();
-        PriorityQueue<Node> fila = new PriorityQueue<>(Comparator.comparingInt(n -> n.custo));
+
+        PriorityQueue<Node> fila = new PriorityQueue<>(
+                Comparator.comparingInt(n -> n.custo)
+        );
+
         Map<Node, Integer> distancias = new HashMap<>();
         Set<Node> visitados = new HashSet<>();
 
@@ -30,8 +36,11 @@ public class Dijkstra {
         boolean encontrado = false;
 
         while(!fila.isEmpty()) {
+
             Node atual = fila.poll();
-            if(visitados.contains(atual)) continue;
+
+            if(visitados.contains(atual))
+                continue;
 
             visitados.add(atual);
             nosExpandidos++;
@@ -44,10 +53,16 @@ public class Dijkstra {
             }
 
             for(Node vizinho : gerarVizinhos(atual)) {
-                int custoAcumulado = atual.custo + grafo.getPeso(atual.x, atual.y, vizinho.x, vizinho.y);
-                if(!distancias.containsKey(vizinho) || custoAcumulado < distancias.get(vizinho)) {
+
+                int custoAcumulado = atual.custo +
+                        grafo.getPeso(atual.x, atual.y, vizinho.x, vizinho.y);
+
+                if(!distancias.containsKey(vizinho) ||
+                        custoAcumulado < distancias.get(vizinho)) {
+
                     vizinho.custo = custoAcumulado;
                     vizinho.pai = atual;
+
                     distancias.put(vizinho, custoAcumulado);
                     fila.add(vizinho);
                 }
@@ -58,40 +73,58 @@ public class Dijkstra {
             caminho = new ArrayList<>();
             custo = 0;
         }
+
         tempo = System.currentTimeMillis() - start;
     }
 
     private List<Node> gerarVizinhos(Node atual) {
+
         List<Node> vizinhos = new ArrayList<>();
+
         int[] dx = {-1, 1, 0, 0};
         int[] dy = {0, 0, -1, 1};
 
-        for(int i=0;i<4;i++) {
+        for(int i = 0; i < 4; i++) {
+
             int nx = atual.x + dx[i];
             int ny = atual.y + dy[i];
+
             int peso = grafo.getPeso(atual.x, atual.y, nx, ny);
-            if(peso > 0) vizinhos.add(new Node(nx, ny));
+
+            if(peso > 0) {
+                vizinhos.add(
+                        new Node(nx, ny, atual.custo + peso, atual)
+                );
+            }
         }
+
         return vizinhos;
     }
 
     private List<Node> reconstruirCaminho(Node destino) {
+
         List<Node> caminho = new ArrayList<>();
         Node atual = destino;
+
         while(atual != null) {
             caminho.add(0, atual);
             atual = atual.pai;
         }
+
         return caminho;
     }
 
     public void gerarArquivoSaida(String arquivoEntrada) {
+
         try {
+
             File dir = new File("output");
-            if(!dir.exists()) dir.mkdirs();
+            if(!dir.exists())
+                dir.mkdirs();
 
             String baseNome = new File(arquivoEntrada).getName();
-            File arquivoSaida = new File(dir, baseNome + ".dijkstra");
+            File arquivoSaida =
+                    new File(dir, baseNome + ".dijkstra");
 
             PrintWriter pw = new PrintWriter(arquivoSaida);
 
@@ -107,9 +140,9 @@ public class Dijkstra {
             }
 
             pw.print("CAMINHO: ");
-            for(int i=0;i<caminho.size();i++) {
+            for(int i = 0; i < caminho.size(); i++) {
                 pw.print("(" + caminho.get(i).x + "," + caminho.get(i).y + ")");
-                if(i < caminho.size()-1) pw.print(" -> ");
+                if(i < caminho.size() - 1) pw.print(" -> ");
             }
             pw.println();
 
@@ -118,8 +151,13 @@ public class Dijkstra {
             pw.println("TEMPO (ms): " + tempo);
 
             pw.close();
+
         } catch(Exception e) {
             e.printStackTrace();
         }
     }
+    public List<Node> getCaminho() { return caminho; }
+    public int getCusto() { return custo; }
+    public int getNosExpandidos() { return nosExpandidos; }
+    public long getTempo() { return tempo; }
 }

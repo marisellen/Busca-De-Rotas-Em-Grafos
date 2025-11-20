@@ -32,8 +32,15 @@ public class Graph {
         }
 
         public int getPeso(int xOrigem, int yOrigem, int xDestino, int yDestino) {
-            if(xDestino < 0 || yDestino < 0 || xDestino >= linhas || yDestino >= colunas) return -1;
-            int peso = matriz[xDestino][yDestino];
-            return peso <= 0 ? -1 : peso;
+            if (xDestino < 0 || yDestino < 0 ||
+                xDestino >= colunas ||
+                yDestino >= linhas)
+                return -1;
+
+            int peso = matriz[yDestino][xDestino];
+            if (peso < 0)
+                return -1;
+
+            return peso == 0 ? 1 : peso;
         }
 }

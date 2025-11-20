@@ -1,0 +1,8 @@
+ALGORITIMO: Dijkstra
+HEURISTICA: 
+ORIGEM: (0,0)
+DESTINO: (3,3)
+CAMINHO: (0,0) -> (1,0) -> (2,0) -> (3,0) -> (4,0) -> (4,1) -> (4,2) -> (4,3) -> (3,3)
+CUSTO: 14
+NOS EXPANDIDOS: 40
+TEMPO (ms): 4
