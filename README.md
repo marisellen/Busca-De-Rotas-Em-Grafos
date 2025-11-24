@@ -1,4 +1,4 @@
-# Busca-De-Rotas-Em-Grafos
+# Busca de rotas em Grafos
 ## Visão Geral
 
 Projeto em Java para implementar e comparar algoritmos clássicos de busca de rotas em grafos bidimensionais. Inclui algoritmos não informados (como BFS e DFS) e informados (como A* e Greedy), com métricas de desempenho para análise.
